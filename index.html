@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AbraXas-MD Session Generator</title>
+</head>
+<body>
+    <h1>AbraXas-MD Session Generator</h1>
+    <input type="text" id="number" placeholder="Enter WhatsApp Number" />
+    <br><br>
+    <button onclick="generatePairingCode()">Generate Pairing Code</button>
+    <button onclick="generateQRCode()">Generate QR Code</button>
+
+    <h2>Output:</h2>
+    <pre id="output"></pre>
+
+    <script>
+        async function generatePairingCode() {
+            const number = document.getElementById('number').value;
+            const response = await fetch(`/generate-pairing-code?number=${encodeURIComponent(number)}`);
+            const data = await response.json();
+            document.getElementById('output').textContent = `Pairing Code: ${data.code}`;
+        }
+
+        async function generateQRCode() {
+            const number = document.getElementById('number').value;
+            const response = await fetch(`/generate-qr-code?number=${encodeURIComponent(number)}`);
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            document.getElementById('output').innerHTML = `<img src="${url}" alt="QR Code" />`;
+        }
+    </script>
+</body>
+</html>
